@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Persons</title>
+        <style>
+            body{
+                background-color: rgb(68, 68, 71);
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: static;
+            }
+
+            .div1{
+                width: 30%;
+                background-color: black;
+                opacity: 50%;
+                border: 4px purple solid;    
+                color: white;
+                margin: 20 px;
+                padding: 15px;
+                position: absolute;
+                top: 5%;
+                transform: translateY(-50%);
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            
+
+        </style>
+    </head>
+    <body>
+        <script>
+
+            function Getall(){
+            fetch(`http://127.0.0.1:5000/persons`)
+                .then(function(response){
+                    return response.json();
+                })
+                .then(function(myJson){
+                    document.write(JSON.stringify(myJson));
+                });
+            }
+           
+            function Getbyid(id){
+            fetch(`http://127.0.0.1:5000/persons/${id}`)
+                .then(function(response){
+                    return response.json();
+                })
+                .then(function(myJson){
+                    document.write(JSON.stringify(myJson));
+                });
+            }
+                   
+            function Post(){
+                let postperson = {
+                name: document.getElementById('postname').value,
+                age: document.getElementById('postage').value,
+                gender: document.getElementById('postgender').value,
+                email: document.getElementById('postemail').value
+                };
+                fetch('http://127.0.0.1:5000/persons', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postperson)
+                    })
+                    .then(function(response) {
+                        if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                        }
+                        alert('Person created successfully');
+                    })
+                    .catch(function(error) {
+                        console.error(error);
+                    });
+            }
+
+            function Update(id){
+                let putperson = {
+                name: document.getElementById('updatename').value,
+                age: document.getElementById('updateage').value,
+                gender: document.getElementById('updategender').value,
+                email: document.getElementById('updateemail').value
+                };
+
+                fetch(`http://127.0.0.1:5000/persons/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(putperson)
+                })
+                .then(function(response) {
+                    if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                    }
+                    alert('Person updated successfully');
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+            }
+            
+            function Delete(id){
+                fetch(`http://127.0.0.1:5000/persons/${id}`, {
+                    method: 'DELETE',
+                    })
+                    .then(function(response) {
+                    if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                    }
+                    alert('Person deleted successfully');
+                    })
+                    .catch(function(error) {
+                    console.error(error);
+                    });
+            }
+            
+        </script>
+
+        
+            <div class="div1">
+                    <!--GET ALL-->
+                        <center>
+                        <button id="getall" style="width: 150px; height:30px;" onclick="Getall()">Get All People</button>
+                        </center>
+                        <hr>
+    
+                    <!--GET BY ID-->
+                        <p>Get Person by ID</p>
+                        ID: <input type="number" id="getbyid" placeholder="ID"  class="div-content">
+                        <Button onclick="Getbyid(document.getElementById('getbyid').value)">Submit</Button>
+                        <hr>
+    
+                    <!--POST-->        
+                        <p>Create new Person</p>
+                        Name: <input type="text" id="postname" placeholder="Name"  class="div-content"><br>
+                        Age: <input type="number" id="postage" placeholder="Age"  class="div-content"><br>
+                        Gender: <input type="text" id="postgender" placeholder="Gender"  class="div-content"><br>
+                        E-mail: <input type="email" id="postemail" placeholder="E-mail"  class="div-content">
+                        <Button id="submit2" onclick="Post()">Submit</Button>
+                        <hr>
+    
+                    <!--UPDATE-->
+                        <p>Update Person by ID</p>
+                        ID: <input type="number" id="updatebyid" placeholder="ID"  class="div-content"><br>
+                        Name: <input type="text" id="updatename" placeholder="Name"  class="div-content"><br>
+                        Age: <input type="number" id="updateage" placeholder="Age"  class="div-content"><br>
+                        Gender: <input type="text" id="updategender" placeholder="Gender"  class="div-content"><br>
+                        E-mail: <input type="email" id="updateemail" placeholder="E-mail"  class="div-content">
+                        <Button id="submit3" onclick="Update(document.getElementById('updatebyid').value)">Submit</Button>
+                        <hr>
+    
+                    <!--DELETE-->
+                        <p>Delete Person by ID</p>
+                        ID: <input type="number" id="delete" placeholder="ID"  class="div-content">
+                        <Button id="submit4" onclick="Delete(document.getElementById('delete').value)">Submit</Button>                   
+            </div>
+    </body>
+</html>
